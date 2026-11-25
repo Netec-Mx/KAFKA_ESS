@@ -14,15 +14,21 @@ Todas las prácticas siguen un mismo caso ficticio, una entidad financiera que r
 
 Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia práctica. Haz clic en los enlaces para comenzar.
 
+## Capítulo 1. El paradigma de Kafka
+
 ### [Práctica 1. Recorrer el registro de eventos con la CLI](Capitulo01/Practica01/README.md)
 
   - **Descripción**: Crear un topic de pagos, publicar eventos y leerlos con dos grupos de consumidores para comprobar la retención, la reanudación y la relectura, y contrastar Kafka con una cola tradicional.
   - ⏱️ **Duración estimada**: 45 min.
 
+## Capítulo 2. Topics, particiones, claves y offsets
+
 ### [Práctica 2. Comprobar el efecto de claves, particiones y grupos de consumidores](Capitulo02/Practica02/README.md)
 
   - **Descripción**: Predecir y comprobar la partición y el orden por cuenta, observar el particionador sticky, repartir particiones entre consumidores, medir lag, reposicionar un grupo y calcular el throughput pico.
   - ⏱️ **Duración estimada**: 67 min.
+
+## Capítulo 3. Clientes .NET con C#
 
 ### [Práctica 3. Conectar un productor C#/.NET con un consumidor C#/.NET](Capitulo03/Practica03/README.md)
 
@@ -33,6 +39,8 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
 
   - **Descripción**: Escalar el consumo con varias instancias del consumidor .NET, observar las reasignaciones, comparar auto.offset.reset y calcular el mínimo inicial de particiones.
   - ⏱️ **Duración estimada**: 44 min.
+
+## Capítulo 4. Errores, reproceso y sistemas sin cliente Kafka
 
 ### [Práctica 5. Provocar fallas en el consumidor sin perder pagos](Capitulo04/Practica05/README.md)
 

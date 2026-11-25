@@ -1,26 +1,35 @@
 <!--
-Pendiente de validación por el instructor: confirmar contra el repositorio de código preparado
-los argumentos --continuo (productor) y --grupo, --reset (consumidor). Eliminar este comentario al validar.
+PLANTILLA COMPACTA DE README POR PRÁCTICA (versión 2.3: pasos detallados sin repeticiones dentro de la práctica: primera vez completo, después breve)
+Uso: copiar este archivo como README.md dentro de CapituloNN/PracticaNN/ y reemplazar todo lo que está entre corchetes.
+Eliminar este comentario y los comentarios de guía antes de publicar.
+
+Reglas de redacción y duración (para el autor, no se publican):
+- Pasos en verbo infinitivo, claros, concretos y en secuencia; un paso = una acción verificable.
+- Incluir nombres exactos de opciones, archivos y valores; prompts listos para copiar en bloques ```text.
+- La suma de minutos de las tareas debe ser igual a la duración del temario; considerar lectura, tiempos de respuesta de los agentes,
+  validación y errores comunes de un participante real, no de un experto.
+- Lo que se repite en todas las prácticas (prerrequisitos generales, entorno, versiones, credenciales) va en el README principal
+  y en Setup_Guide.md, no aquí.
+- No usar <details> ni llaves dobles de Liquid; usar rutas relativas sin espacios ni acentos.
 -->
 
 # Práctica 4. Escalar el consumo y estimar el número de particiones
 
 **Capítulo 3. Clientes .NET con C#**
 
-⏱️ **Duración:** 44 min · 🛠️ **Herramienta:** .NET 10 con Confluent.Kafka 2.16 y CLI de Kafka 4.2 · 📄 **Entregable:** Bitácora y hoja de dimensionamiento ACT-04
+⏱️ **Duración:** 44 min · 🛠️ **Herramienta:** [Agente o aplicación principal] · 📄 **Entregable:** [Nombre del entregable]
 
 ## Descripción
 
-El volumen de pagos de la entidad financiera ficticia crece y el servicio consumidor ya no alcanza. En esta práctica el participante levanta varias instancias del consumidor .NET en el mismo grupo mientras el productor publica de forma continua, observa con la CLI cómo se reasignan las particiones al sumar y detener instancias, compara `auto.offset.reset` con un grupo nuevo y, con el throughput pico calculado en la Práctica 2, estima el número mínimo de particiones que necesitaría el topic.
+[3 a 4 líneas: escenario de negocio, qué hará el participante y qué valor obtendrá.]
 
 ## Objetivos de aprendizaje
 
 Al finalizar la práctica, el participante será capaz de:
 
-- Escalar el consumo con varias instancias de un consumidor .NET en el mismo grupo.
-- Interpretar con la CLI las reasignaciones al sumar y detener instancias.
-- Distinguir el efecto de `earliest` y `latest` en un grupo sin offsets confirmados.
-- Calcular un mínimo inicial de particiones a partir del throughput pico y de las capacidades por partición.
+- [Objetivo 1, alineado con el temario]
+- [Objetivo 2]
+- [Objetivo 3]
 
 <img src="../../images/p04-objetivo.svg" alt="Diagrama de la Práctica 4" width="720"/>
 
@@ -28,241 +37,145 @@ Al finalizar la práctica, el participante será capaz de:
 
 | Elemento | Valor |
 |---|---|
-| Dónde trabajar | Terminal de la máquina virtual del curso, con cinco terminales disponibles |
-| Código de la práctica | `~/kafka-ess-labs`, con la configuración de la Práctica 3 |
-| Topic de la práctica | `pagos` (3 particiones) |
-| Grupo de consumidores | `escala-[INICIALES]` |
-| Dato de entrada | Throughput pico calculado en la Práctica 2, Tarea 6 |
-| Nombre del entregable | `ACT04_Bitacora_[INICIALES].md` en `~/entregables/` |
+| Dónde trabajar | [Aplicación > menú > opción] |
+| Archivos de la práctica | [Archivo1.docx](recursos/Archivo1.docx), [Archivo2.xlsx](recursos/Archivo2.xlsx) |
+| Ubicación en OneDrive | `Laboratorio_Copilot_ISA/PracticaNN/` |
+| Dato clave del escenario | [Valor que el participante necesita tener a la mano] |
+| Nombre del entregable | `[Nombre]_[INICIALES].docx` |
 
-> Sustituya `[INICIALES]` por sus iniciales en minúsculas. Todos los datos de la práctica son ficticios.
+> Sustituya `[INICIALES]` por sus iniciales en nombres de archivo y prompts (por ejemplo, `Reporte_LMR.docx`). Todos los datos de la práctica son ficticios.
 
----
-
-## Tarea 1. Iniciar el productor continuo y la primera instancia (6 min)
-
-**Objetivo:** Tener el productor .NET publicando de forma continua y una instancia del consumidor del grupo `escala-[INICIALES]` con las tres particiones asignadas.
-
-**Por qué:** Las reasignaciones solo se aprecian con tráfico constante: cada instancia muestra qué particiones procesa en cada momento.
-
-**Paso 1.** Crear la bitácora con la predicción:
-
-```bash
-printf '# ACT-04. Bitácora\n\n## Predicción\nCon 2 instancias espero... Con 3 instancias espero... Si detengo una de 3...\n\n' \
-  > ~/entregables/ACT04_Bitacora_[INICIALES].md
-```
-
-Completar la predicción con `nano` antes de continuar.
-
-**Paso 2.** En **T1**, iniciar el productor continuo:
-
-```bash
-cd ~/kafka-ess-labs
-dotnet run --project src/Pagos.Producer -- --continuo
-```
-
-- **Qué verás:** una línea por pago publicado, aproximadamente cada segundo, con su partición y offset.
-
-**Paso 3.** En **T2**, iniciar la primera instancia del consumidor:
-
-```bash
-cd ~/kafka-ess-labs
-dotnet run --project src/Pagos.Consumer -- --grupo escala-[INICIALES]
-```
-
-- **Qué verás:** la asignación de las particiones `[0, 1, 2]` y pagos procesados de las tres.
-
-**Al terminar esta tarea debes tener:**
-
-- ✔ El productor publicando de forma continua.
-- ✔ Una instancia con las tres particiones.
+<!-- Opcional: una nota breve para el instructor (exposición previa, demostración, trabajo en paralelo). -->
 
 ---
 
-## Tarea 2. Escalar a dos instancias (8 min)
+<!--
+Estructura obligatoria de cada tarea:
+- Objetivo: el RESULTADO concreto y verificable que tendrá el participante (qué tabla, lista, archivo o confirmación), no la acción.
+  Mal: "Relacionar hallazgos con prioridades". Bien: "Obtener una tabla de las 4 prioridades con nivel de contribución, evidencia y restricción".
+- Por qué: una o dos líneas que conecten la tarea con el problema del escenario y con los datos concretos que el participante debe considerar.
+- Pasos: una acción por paso. Indicar dónde hacer clic (ruta completa: aplicación > menú > opción), qué escribir (prompt completo),
+  y debajo de cada paso las viñetas que apliquen: "Qué verás" (lo que aparece en pantalla), "Si no ocurre así" o "Alternativa"
+  (qué hacer si algo falla), "Cómo insertar los archivos" (cuando el prompt referencia archivos) e "Importante" (advertencias).
+  Para guardar, indicar la ruta completa: Archivo > Guardar como > OneDrive > Laboratorio_Copilot_ISA > Entregables y el nombre exacto.
+- Primera vez completo, después breve: dentro de una misma práctica, los procedimientos que se repiten (abrir Copilot o un agente,
+  insertar archivos con /, crear el documento de Word y pegar, guardar en Entregables) se explican completos solo la primera vez;
+  las siguientes veces se escriben en una línea, por ejemplo "Guardar en `Entregables` con el nombre `X`, igual que antes".
+  Cada práctica debe poder seguirse sin abrir otra práctica ni otro documento.
+- No incluir viñetas obvias (por ejemplo, "Enviar: presionar Enter"); el paso ya dice "pegar el prompt y enviarlo".
+  Evitar pasos vagos como "Revisar el resultado" o "Copiar a Word": decir qué revisar y dónde pegar y guardar.
+- Al terminar esta tarea debes tener: 1 a 3 elementos comprobables que permitan al participante saber que puede continuar.
+-->
 
-**Objetivo:** Obtener el registro de asignación del grupo con dos instancias, una con dos particiones y otra con una.
+## Tarea 1. [Nombre de la tarea] ([X] min)
 
-**Por qué:** Al sumar una instancia, el grupo se rebalancea y redistribuye las particiones sin que el productor lo note.
+**Objetivo:** [Resultado concreto: "Obtener una tabla de … con …"]
 
-**Paso 1.** En **T3**, iniciar la segunda instancia con el mismo comando de la Tarea 1, paso 3.
+**Por qué:** [Relación con el escenario y los datos clave que deben considerarse.]
 
-- **Qué verás:** en **T2**, un aviso de revocación y una nueva asignación más pequeña; en **T3**, la asignación de las particiones restantes.
+**Paso 1.** Abrir **Microsoft Edge**, escribir [m365.cloud.microsoft](https://m365.cloud.microsoft/) en la barra de direcciones y presionar **Enter**. Si se solicita, iniciar sesión con su cuenta corporativa.
 
-**Paso 2.** En **T5**, esperar 10 segundos y registrar la asignación:
+- **Qué verás:** [Lo que aparece en pantalla al completar la acción.]
+- **Alternativa:** [Si aparece algo distinto, qué hacer.]
 
-```bash
-kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP --describe \
-  --group escala-[INICIALES] --members --verbose | tee ~/entregables/act04-2instancias.txt
-```
+**Paso 2.** En el panel izquierdo, seleccionar **[menú]**. Escribir `[nombre exacto]` en el cuadro de búsqueda y hacer clic en el resultado.
 
-- **Qué verás:** dos miembros con `#PARTITIONS` 2 y 1.
+- **Qué verás:** [Confirmación visible, por ejemplo el nombre del agente encima del cuadro de mensaje.]
+- **Si no ocurre así:** [Ruta alternativa o a quién avisar.]
 
-**Paso 3.** Copiar el registro a la bitácora bajo `## Escenario 1. Dos instancias`.
-
-**Al terminar esta tarea debes tener:**
-
-- ✔ El registro de asignación con dos instancias.
-
----
-
-## Tarea 3. Escalar a tres instancias y detener una (8 min)
-
-**Objetivo:** Obtener dos registros de asignación: uno con tres instancias de una partición cada una y otro después de detener una instancia.
-
-**Por qué:** Con tres particiones, tres instancias es el máximo paralelismo útil del grupo. Si una instancia cae, sus particiones pasan a las restantes.
-
-**Paso 1.** En **T4**, iniciar la tercera instancia con el mismo comando. Esperar 10 segundos y registrar la asignación en **T5** guardando en `act04-3instancias.txt`.
-
-- **Qué verás:** tres miembros con `#PARTITIONS 1`.
-
-**Paso 2.** Detener la instancia de **T3** con **Ctrl+C**. Esperar 10 segundos y registrar la asignación guardando en `act04-detenida.txt`.
-
-- **Qué verás:** dos miembros; uno de ellos vuelve a tener dos particiones. En **T1**, el productor siguió publicando sin interrupción.
-
-**Paso 3.** Describir el lag del grupo:
-
-```bash
-kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP --describe --group escala-[INICIALES]
-```
-
-- **Qué verás:** un lag bajo y estable en las tres particiones: las instancias restantes absorben la carga.
-
-**Paso 4.** Copiar los registros a la bitácora bajo `## Escenario 2. Tres instancias` y `## Escenario 3. Instancia detenida`, y contrastarlos con la predicción.
-
-**Paso 5.** Detener las instancias de **T2** y **T4** con **Ctrl+C**. Dejar el productor de **T1** en ejecución.
-
-**Al terminar esta tarea debes tener:**
-
-- ✔ Los registros con tres instancias y con una instancia detenida.
-
----
-
-## Tarea 4. Comparar auto.offset.reset con un grupo nuevo (8 min)
-
-**Objetivo:** Obtener la evidencia de que un grupo nuevo con `latest` empieza en los pagos que llegan a partir de ese momento y uno con `earliest` empieza en el offset 0.
-
-**Por qué:** `auto.offset.reset` solo decide el punto de partida de un grupo sin offsets confirmados. Elegir mal puede hacer que un servicio nuevo ignore el historial o lo reprocese completo.
-
-**Paso 1.** En **T2**, iniciar un consumidor con un grupo nuevo y `latest`. Observar los primeros pagos y detenerlo con **Ctrl+C** después de 10 segundos:
-
-```bash
-dotnet run --project src/Pagos.Consumer -- --grupo nuevo-latest-[INICIALES] --reset latest
-```
-
-- **Qué verás:** solo los pagos que el productor publica a partir de ese momento, con offsets altos.
-
-**Paso 2.** En **T2**, iniciar un consumidor con otro grupo nuevo y `earliest`. Detenerlo con **Ctrl+C** después de 10 segundos:
-
-```bash
-dotnet run --project src/Pagos.Consumer -- --grupo nuevo-earliest-[INICIALES] --reset earliest
-```
-
-- **Qué verás:** los primeros pagos del topic con offset 0 en cada partición, incluidos los de la Práctica 3.
-
-**Paso 3.** Volver a iniciar el grupo `nuevo-latest-[INICIALES]`, esta vez con `--reset earliest`, y detenerlo después de 10 segundos.
-
-- **Qué verás:** continúa desde su último offset confirmado; `earliest` ya no aplica porque el grupo tiene offsets.
-
-**Paso 4.** Detener el productor de **T1** con **Ctrl+C**. Agregar a la bitácora, bajo `## auto.offset.reset`, las tres observaciones y una explicación de cuándo usar cada valor.
-
-**Al terminar esta tarea debes tener:**
-
-- ✔ La evidencia de `latest` y `earliest` con grupos nuevos.
-- ✔ La explicación de por qué no aplica a un grupo con offsets.
-
----
-
-## Tarea 5. Estimar el número mínimo de particiones (14 min)
-
-**Objetivo:** Tener en la bitácora la hoja de dimensionamiento con el throughput pico, las capacidades por partición, el mínimo de particiones redondeado hacia arriba y la justificación del paralelismo.
-
-**Por qué:** El número de particiones limita el paralelismo del grupo y agregar particiones después cambia la partición de muchas cuentas, lo que afecta el orden por cuenta. Por eso se estima desde el inicio.
-
-**Paso 1.** Usar los datos del ejercicio:
-
-| Dato | Valor |
-|---|---|
-| Throughput pico (de la Práctica 2) | 7.2 MB/s (6,000 mensajes/s × 1.2 KB) |
-| Capacidad de producción por partición | 12 MB/s |
-| Capacidad de consumo por partición (una instancia del consumidor) | 1.8 MB/s |
-
-**Paso 2.** Agregar a la bitácora la sección `## Hoja de dimensionamiento` y calcular:
+**Paso 3.** Pegar el siguiente prompt y enviarlo:
 
 ```text
-Particiones por producción = throughput pico ÷ capacidad de producción por partición = 7.2 ÷ 12  = ____
-Particiones por consumo    = throughput pico ÷ capacidad de consumo por partición    = 7.2 ÷ 1.8 = ____
-Mínimo inicial de particiones = máximo de ambos valores, redondeado hacia arriba    = ____
+[Prompt completo, referenciando archivos con /Nombre_Archivo]
 ```
 
-**Paso 3.** Responder en la misma sección, con una o dos líneas cada una:
+- **Cómo insertar los archivos:** cada texto que empieza con `/` es un archivo: borrarlo, escribir `/` y las primeras letras del nombre, y elegir el archivo en la lista. Si no aparece, usar **+** > **Cargar desde OneDrive** > `Laboratorio_Copilot_ISA/PracticaNN`.
+- **Qué verás:** [Estructura esperada de la respuesta y tiempo aproximado.]
 
-- ¿Cuántas instancias activas puede tener como máximo el grupo con el topic actual de 3 particiones, y alcanza para el pico?
-- ¿Qué pasaría con el orden de los pagos por cuenta si se agregan particiones al topic `pagos` después de estar en uso?
-- Si unas pocas cuentas concentran la mayoría de los pagos, ¿por qué la capacidad efectiva podría ser menor que la calculada?
-- ¿Qué medirías (lag y rendimiento) para ajustar la estimación y por qué debe validarse con pruebas de carga?
+**Paso 4.** Comprobar que la respuesta incluya [datos concretos esperados, con cifras o nombres].
 
-**Paso 4.** Revisar que la bitácora tenga los tres escenarios de asignación, la sección de `auto.offset.reset` y la hoja de dimensionamiento:
-
-```bash
-grep -c "^## " ~/entregables/ACT04_Bitacora_[INICIALES].md
-```
-
-- **Qué verás:** 6 o más secciones.
+- **Si no ocurre así:** escribir *"[prompt de corrección]"*.
 
 **Al terminar esta tarea debes tener:**
 
-- ✔ El mínimo de particiones calculado y justificado.
-- ✔ Las respuestas sobre paralelismo, nuevas particiones, distribución desigual y validación.
+- ✔ [Elemento comprobable 1]
+- ✔ [Elemento comprobable 2]
+
+---
+
+## Tarea 2. [Nombre de la tarea] ([X] min)
+
+**Objetivo:** [Resultado concreto.]
+
+**Por qué:** [Relación con el escenario.]
+
+**Paso 1.** [Acción.]
+
+**Paso 2.** [Acción y verificación.]
+
+**Al terminar esta tarea debes tener:**
+
+- ✔ [Elemento comprobable]
+
+---
+
+## Tarea N. [Nombre de la tarea] ([X] min)
+
+**Objetivo:** Tener guardado `[Nombre]_[INICIALES].ext` con [secciones o contenido].
+
+**Por qué:** [Para qué se usará el entregable.]
+
+**Paso 1.** Abrir Word (escritorio o web) y crear un **Documento en blanco**. En Copilot, seleccionar **Copiar** debajo de [respuestas] y pegar en Word con **Ctrl+V**.
+
+**Paso 2.** Agregar los títulos [lista de secciones] y mover cada contenido bajo el título que corresponda.
+
+**Paso 3.** Seleccionar **Archivo > Guardar como**, elegir **OneDrive > Laboratorio_Copilot_ISA > Entregables** y guardar con el nombre `[Nombre]_[INICIALES].ext`.
+
+**Al terminar esta tarea debes tener:**
+
+- ✔ [Entregable con sus secciones]
+- ✔ El archivo guardado en `Entregables`.
 
 ---
 
 ## Validación y pruebas
 
-| Caso | Acción | Resultado esperado |
+| Caso | Acción o prompt | Resultado esperado |
 |---|---|---|
-| Caso 1 | Sumar una segunda instancia | Reasignación 2 + 1 particiones |
-| Caso 2 | Detener una de tres instancias | Sus particiones pasan a las restantes y el lag se estabiliza |
-| Caso 3 | Grupo nuevo con `latest` y con `earliest` | `latest` inicia en los pagos nuevos; `earliest` en el offset 0 |
-| Caso 4 | Calcular el mínimo de particiones | máx(7.2 ÷ 12, 7.2 ÷ 1.8) = 4 particiones, redondeado hacia arriba |
-| Caso adversarial | Levantar una cuarta instancia con 3 particiones | Queda sin asignación: no aumenta la capacidad de consumo |
+| Caso 1 | [Entrada] | [Resultado] |
+| Caso 2 | [Entrada] | [Resultado] |
+| Caso adversarial | [Entrada que intenta inducir un error] | [Respuesta correcta esperada] |
 
 ## Resultado esperado
 
-- El registro demuestra la reasignación entre instancias y distingue `earliest` y `latest`.
-- El dimensionamiento toma el mayor valor entre ambos cocientes, reconoce el límite de paralelismo del grupo y aclara que la estimación debe validarse con pruebas de carga.
+- [Resultado 1]
+- [Resultado 2]
 
-**Entregable:** Registro de asignaciones por escenario, explicación de `auto.offset.reset` y hoja breve con throughput pico, capacidades asumidas por partición, cálculo del mínimo de particiones y justificación del paralelismo requerido (`ACT04_Bitacora_[INICIALES].md`).
+**Entregable:** [Descripción exacta del entregable según el temario] (`[Nombre]_[INICIALES].ext`).
 
-<!-- Agregar captura del resultado final: ../../images/p04-resultado.png -->
+<img src="../../images/p04-resultado.svg" alt="Resultado final de la Práctica 4" width="640"/>
 
 ## Solución de problemas
 
-**Las instancias tardan en recibir particiones**
-- *Síntoma:* una instancia nueva tarda varios segundos en mostrar su asignación.
-- *Causa:* el rebalanceo espera a que todos los miembros respondan.
-- *Solución:* esperar 10 a 15 segundos antes de describir el grupo.
+**[Problema 1]**
+- *Síntoma:* [Qué observa el participante]
+- *Causa:* [Por qué ocurre]
+- *Solución:* [Pasos concretos]
 
-**El consumidor con `latest` no muestra nada**
-- *Síntoma:* el consumidor no procesa pagos.
-- *Causa:* el productor continuo no está en ejecución.
-- *Solución:* comprobar que **T1** sigue publicando.
-
-**Una instancia detenida sigue apareciendo como miembro**
-- *Síntoma:* el describe muestra todavía al miembro detenido.
-- *Causa:* la instancia se cerró sin abandonar el grupo y el clúster espera a que expire su sesión.
-- *Solución:* esperar unos 45 segundos y repetir el describe.
+**[Problema 2]**
+- *Síntoma:* [...]
+- *Causa:* [...]
+- *Solución:* [...]
 
 ## Limpieza
 
-- Detener productor y consumidores. Conservar el topic `pagos` y los grupos.
+- [Acción 1, por ejemplo: no compartir el entregable; conservarlo en `Entregables`.]
 
 ## Recursos opcionales
 
-- [Confluent. Cliente .NET para Apache Kafka 2.16](https://docs.confluent.io/kafka-clients/dotnet/2.16/overview.html)
-- [Apache Kafka 4.2. Design](https://kafka.apache.org/42/design/design/)
+- [Documentación oficial](https://learn.microsoft.com/)
 
-<sub>Complejidad: Intermedia · Nivel de Bloom: Analizar · Resultados de aprendizaje que verifica: R2 y R3</sub>
+<sub>Complejidad: [Fácil / Intermedia / Avanzada] · Nivel de Bloom: [Recordar / Comprender / Aplicar / Analizar / Evaluar / Crear]</sub>
 
 ---
 

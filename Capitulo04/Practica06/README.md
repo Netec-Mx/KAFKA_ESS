@@ -1,26 +1,35 @@
 <!--
-Pendiente de validación por el instructor: confirmar contra el repositorio de código preparado
-la ruta y los argumentos del script legado (~/kafka-ess-labs/legado/legado-pagos.sh) y que la versión
-del HTTP Bridge desplegada acepta el formato embebido text. Eliminar este comentario al validar.
+PLANTILLA COMPACTA DE README POR PRÁCTICA (versión 2.3: pasos detallados sin repeticiones dentro de la práctica: primera vez completo, después breve)
+Uso: copiar este archivo como README.md dentro de CapituloNN/PracticaNN/ y reemplazar todo lo que está entre corchetes.
+Eliminar este comentario y los comentarios de guía antes de publicar.
+
+Reglas de redacción y duración (para el autor, no se publican):
+- Pasos en verbo infinitivo, claros, concretos y en secuencia; un paso = una acción verificable.
+- Incluir nombres exactos de opciones, archivos y valores; prompts listos para copiar en bloques ```text.
+- La suma de minutos de las tareas debe ser igual a la duración del temario; considerar lectura, tiempos de respuesta de los agentes,
+  validación y errores comunes de un participante real, no de un experto.
+- Lo que se repite en todas las prácticas (prerrequisitos generales, entorno, versiones, credenciales) va en el README principal
+  y en Setup_Guide.md, no aquí.
+- No usar <details> ni llaves dobles de Liquid; usar rutas relativas sin espacios ni acentos.
 -->
 
 # Práctica 6. Publicar desde un sistema legado por HTTP
 
 **Capítulo 4. Errores, reproceso y sistemas sin cliente Kafka**
 
-⏱️ **Duración:** 25 min · 🛠️ **Herramienta:** HTTP Bridge de Strimzi, `curl` y CLI de Kafka 4.2 · 📄 **Entregable:** Bitácora ACT-06
+⏱️ **Duración:** 25 min · 🛠️ **Herramienta:** [Agente o aplicación principal] · 📄 **Entregable:** [Nombre del entregable]
 
 ## Descripción
 
-Un sistema de pagos legado de la entidad financiera ficticia no puede incorporar un cliente Kafka; solo puede hacer llamadas HTTP. En esta práctica el participante publica sus pagos en el topic `pagos` a través del HTTP Bridge de Strimzi, con la cuenta como clave en formato de texto, comprueba con la CLI que llegan con su clave y a la partición esperada, y verifica que el consumidor .NET de la Práctica 5 los procesa junto con los del productor .NET.
+[3 a 4 líneas: escenario de negocio, qué hará el participante y qué valor obtendrá.]
 
 ## Objetivos de aprendizaje
 
 Al finalizar la práctica, el participante será capaz de:
 
-- Comprobar la disponibilidad del HTTP Bridge y publicar un evento con clave mediante una llamada HTTP.
-- Ejecutar el script del sistema legado contra el HTTP Bridge.
-- Verificar con la CLI y con el consumidor .NET el recorrido completo de un pago publicado por HTTP.
+- [Objetivo 1, alineado con el temario]
+- [Objetivo 2]
+- [Objetivo 3]
 
 <img src="../../images/p06-objetivo.svg" alt="Diagrama de la Práctica 6" width="720"/>
 
@@ -28,195 +37,145 @@ Al finalizar la práctica, el participante será capaz de:
 
 | Elemento | Valor |
 |---|---|
-| Dónde trabajar | Terminal de la máquina virtual del curso |
-| Variable del HTTP Bridge | `$BRIDGE_URL` (definida en el [Setup Guide](../../Setup_Guide.md)) |
-| Script del sistema legado | `~/kafka-ess-labs/legado/legado-pagos.sh` |
-| Topic de la práctica | `pagos` |
-| Grupo de consumidores | `pagos-act05-[INICIALES]` (el de la Práctica 5) |
-| Nombre del entregable | `ACT06_Bitacora_[INICIALES].md` en `~/entregables/` |
+| Dónde trabajar | [Aplicación > menú > opción] |
+| Archivos de la práctica | [Archivo1.docx](recursos/Archivo1.docx), [Archivo2.xlsx](recursos/Archivo2.xlsx) |
+| Ubicación en OneDrive | `Laboratorio_Copilot_ISA/PracticaNN/` |
+| Dato clave del escenario | [Valor que el participante necesita tener a la mano] |
+| Nombre del entregable | `[Nombre]_[INICIALES].docx` |
 
-> Sustituya `[INICIALES]` por sus iniciales en minúsculas. Todos los datos de la práctica son ficticios.
+> Sustituya `[INICIALES]` por sus iniciales en nombres de archivo y prompts (por ejemplo, `Reporte_LMR.docx`). Todos los datos de la práctica son ficticios.
 
----
-
-## Tarea 1. Comprobar el HTTP Bridge (5 min)
-
-**Objetivo:** Obtener la respuesta del HTTP Bridge que confirma que está disponible y que ve el topic `pagos`.
-
-**Por qué:** El HTTP Bridge es un servicio intermedio: traduce llamadas HTTP a operaciones de productor y consumidor de Kafka. Antes de publicar hay que confirmar que responde.
-
-**Paso 1.** Crear la bitácora y comprobar la variable:
-
-```bash
-printf '# ACT-06. Bitácora\n\n## Predicción\nEl pago CTA-1001 publicado por HTTP caerá en la partición...\n\n' \
-  > ~/entregables/ACT06_Bitacora_[INICIALES].md
-echo $BRIDGE_URL
-```
-
-Completar la predicción con la partición observada para `CTA-1001` en la Práctica 3.
-
-**Paso 2.** Consultar el estado del HTTP Bridge y la lista de topics:
-
-```bash
-curl -s -o /dev/null -w "%{http_code}\n" $BRIDGE_URL/healthy
-curl -s $BRIDGE_URL/topics
-```
-
-- **Qué verás:** el código `200` o `204` y una lista JSON que incluye `"pagos"` y `"pagos-errores"`.
-- **Si no ocurre así:** si `curl` no conecta, revisar la sección *Troubleshooting* del [Setup Guide](../../Setup_Guide.md).
-
-**Al terminar esta tarea debes tener:**
-
-- ✔ El HTTP Bridge disponible.
+<!-- Opcional: una nota breve para el instructor (exposición previa, demostración, trabajo en paralelo). -->
 
 ---
 
-## Tarea 2. Publicar un pago por HTTP con clave de texto (7 min)
+<!--
+Estructura obligatoria de cada tarea:
+- Objetivo: el RESULTADO concreto y verificable que tendrá el participante (qué tabla, lista, archivo o confirmación), no la acción.
+  Mal: "Relacionar hallazgos con prioridades". Bien: "Obtener una tabla de las 4 prioridades con nivel de contribución, evidencia y restricción".
+- Por qué: una o dos líneas que conecten la tarea con el problema del escenario y con los datos concretos que el participante debe considerar.
+- Pasos: una acción por paso. Indicar dónde hacer clic (ruta completa: aplicación > menú > opción), qué escribir (prompt completo),
+  y debajo de cada paso las viñetas que apliquen: "Qué verás" (lo que aparece en pantalla), "Si no ocurre así" o "Alternativa"
+  (qué hacer si algo falla), "Cómo insertar los archivos" (cuando el prompt referencia archivos) e "Importante" (advertencias).
+  Para guardar, indicar la ruta completa: Archivo > Guardar como > OneDrive > Laboratorio_Copilot_ISA > Entregables y el nombre exacto.
+- Primera vez completo, después breve: dentro de una misma práctica, los procedimientos que se repiten (abrir Copilot o un agente,
+  insertar archivos con /, crear el documento de Word y pegar, guardar en Entregables) se explican completos solo la primera vez;
+  las siguientes veces se escriben en una línea, por ejemplo "Guardar en `Entregables` con el nombre `X`, igual que antes".
+  Cada práctica debe poder seguirse sin abrir otra práctica ni otro documento.
+- No incluir viñetas obvias (por ejemplo, "Enviar: presionar Enter"); el paso ya dice "pegar el prompt y enviarlo".
+  Evitar pasos vagos como "Revisar el resultado" o "Copiar a Word": decir qué revisar y dónde pegar y guardar.
+- Al terminar esta tarea debes tener: 1 a 3 elementos comprobables que permitan al participante saber que puede continuar.
+-->
 
-**Objetivo:** Obtener la respuesta del HTTP Bridge con la partición y el offset del pago `P-HTTP-01` de la cuenta `CTA-1001`.
+## Tarea 1. [Nombre de la tarea] ([X] min)
 
-**Por qué:** En el formato `text`, la clave y el valor se envían como texto tal cual. La clave `CTA-1001` llega igual que la que usa el productor .NET, por lo que el pago cae en la misma partición.
+**Objetivo:** [Resultado concreto: "Obtener una tabla de … con …"]
 
-**Paso 1.** Publicar el pago:
+**Por qué:** [Relación con el escenario y los datos clave que deben considerarse.]
 
-```bash
-curl -s -X POST $BRIDGE_URL/topics/pagos \
-  -H 'Content-Type: application/vnd.kafka.text.v2+json' \
-  -d '{"records":[{"key":"CTA-1001","value":"{\"idPago\":\"P-HTTP-01\",\"cuenta\":\"CTA-1001\",\"monto\":250.00,\"moneda\":\"MXN\"}"}]}'
+**Paso 1.** Abrir **Microsoft Edge**, escribir [m365.cloud.microsoft](https://m365.cloud.microsoft/) en la barra de direcciones y presionar **Enter**. Si se solicita, iniciar sesión con su cuenta corporativa.
+
+- **Qué verás:** [Lo que aparece en pantalla al completar la acción.]
+- **Alternativa:** [Si aparece algo distinto, qué hacer.]
+
+**Paso 2.** En el panel izquierdo, seleccionar **[menú]**. Escribir `[nombre exacto]` en el cuadro de búsqueda y hacer clic en el resultado.
+
+- **Qué verás:** [Confirmación visible, por ejemplo el nombre del agente encima del cuadro de mensaje.]
+- **Si no ocurre así:** [Ruta alternativa o a quién avisar.]
+
+**Paso 3.** Pegar el siguiente prompt y enviarlo:
+
+```text
+[Prompt completo, referenciando archivos con /Nombre_Archivo]
 ```
 
-- **Qué verás:** una respuesta como `{"offsets":[{"partition":N,"offset":M}]}`.
-- **Importante:** el valor es un texto que contiene el JSON del pago; por eso las comillas internas van escapadas con `\`.
+- **Cómo insertar los archivos:** cada texto que empieza con `/` es un archivo: borrarlo, escribir `/` y las primeras letras del nombre, y elegir el archivo en la lista. Si no aparece, usar **+** > **Cargar desde OneDrive** > `Laboratorio_Copilot_ISA/PracticaNN`.
+- **Qué verás:** [Estructura esperada de la respuesta y tiempo aproximado.]
 
-**Paso 2.** Comparar la partición de la respuesta con la de `CTA-1001` en la Práctica 3 y anotar en la bitácora, bajo `## Evidencia 1. Llamada HTTP`, la llamada y la respuesta.
+**Paso 4.** Comprobar que la respuesta incluya [datos concretos esperados, con cifras o nombres].
+
+- **Si no ocurre así:** escribir *"[prompt de corrección]"*.
 
 **Al terminar esta tarea debes tener:**
 
-- ✔ El pago `P-HTTP-01` publicado, con su partición y offset.
+- ✔ [Elemento comprobable 1]
+- ✔ [Elemento comprobable 2]
 
 ---
 
-## Tarea 3. Ejecutar el sistema legado (5 min)
+## Tarea 2. [Nombre de la tarea] ([X] min)
 
-**Objetivo:** Obtener la salida del script del sistema legado con 5 pagos publicados por HTTP.
+**Objetivo:** [Resultado concreto.]
 
-**Por qué:** El script simula al sistema legado real: registra pagos y los informa mediante las mismas llamadas HTTP de la Tarea 2.
+**Por qué:** [Relación con el escenario.]
 
-**Paso 1.** Revisar la llamada que hace el script:
+**Paso 1.** [Acción.]
 
-```bash
-grep -n "curl" ~/kafka-ess-labs/legado/legado-pagos.sh
-```
-
-- **Qué verás:** una llamada `POST` a `$BRIDGE_URL/topics/pagos` con el mismo `Content-Type` de la Tarea 2.
-
-**Paso 2.** Ejecutar el script para 5 pagos:
-
-```bash
-bash ~/kafka-ess-labs/legado/legado-pagos.sh 5 | tee ~/entregables/act06-legado.txt
-```
-
-- **Qué verás:** cinco respuestas con su partición y offset.
+**Paso 2.** [Acción y verificación.]
 
 **Al terminar esta tarea debes tener:**
 
-- ✔ Cinco pagos del sistema legado publicados.
+- ✔ [Elemento comprobable]
 
 ---
 
-## Tarea 4. Verificar el recorrido con la CLI y el consumidor .NET (8 min)
+## Tarea N. [Nombre de la tarea] ([X] min)
 
-**Objetivo:** Obtener la salida de la CLI con los pagos HTTP y sus claves, y la del consumidor .NET procesándolos junto con pagos del productor .NET.
+**Objetivo:** Tener guardado `[Nombre]_[INICIALES].ext` con [secciones o contenido].
 
-**Por qué:** El objetivo de negocio es que los pagos del sistema legado se procesen igual que los demás, sin cambios en el consumidor.
+**Por qué:** [Para qué se usará el entregable.]
 
-**Paso 1.** Leer los últimos pagos del topic con su clave:
+**Paso 1.** Abrir Word (escritorio o web) y crear un **Documento en blanco**. En Copilot, seleccionar **Copiar** debajo de [respuestas] y pegar en Word con **Ctrl+V**.
 
-```bash
-kafka-console-consumer.sh --bootstrap-server $BOOTSTRAP --topic pagos \
-  --group revision-http-[INICIALES] --from-beginning --timeout-ms 10000 \
-  --property print.key=true --property print.partition=true 2>/dev/null | grep -E "P-HTTP|LEG"
-```
+**Paso 2.** Agregar los títulos [lista de secciones] y mover cada contenido bajo el título que corresponda.
 
-- **Qué verás:** el pago `P-HTTP-01` y los pagos del sistema legado, cada uno con su clave de cuenta como columna separada.
-
-**Paso 2.** En **T1**, publicar 5 pagos con el productor .NET:
-
-```bash
-cd ~/kafka-ess-labs && dotnet run --project src/Pagos.Producer -- --cantidad 5
-```
-
-**Paso 3.** En **T2**, ejecutar el consumidor .NET con los ajustes de la Práctica 5 y detenerlo con **Ctrl+C** cuando deje de procesar:
-
-```bash
-dotnet run --project src/Pagos.Consumer -- --grupo pagos-act05-[INICIALES] \
-  --salida ~/act05/resultado-idem.csv | tee ~/entregables/act06-consumidor.txt
-```
-
-- **Qué verás:** los 6 pagos publicados por HTTP y los 5 del productor .NET procesados, sin líneas `INVALIDO`.
-
-**Paso 4.** Comprobar el lag del grupo:
-
-```bash
-kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP --describe --group pagos-act05-[INICIALES]
-```
-
-- **Qué verás:** `LAG 0`.
-
-**Paso 5.** Copiar las salidas a la bitácora bajo `## Evidencia 2. Recorrido` y agregar una explicación de tres a cinco líneas del recorrido: sistema legado → HTTP Bridge → topic `pagos` → consumidor .NET. Mencionar en una línea cuándo convendría Kafka Connect en lugar del HTTP Bridge.
+**Paso 3.** Seleccionar **Archivo > Guardar como**, elegir **OneDrive > Laboratorio_Copilot_ISA > Entregables** y guardar con el nombre `[Nombre]_[INICIALES].ext`.
 
 **Al terminar esta tarea debes tener:**
 
-- ✔ Los pagos HTTP visibles en la CLI con su clave.
-- ✔ El consumidor .NET procesando pagos HTTP y .NET, con lag cero.
+- ✔ [Entregable con sus secciones]
+- ✔ El archivo guardado en `Entregables`.
 
 ---
 
 ## Validación y pruebas
 
-| Caso | Acción | Resultado esperado |
+| Caso | Acción o prompt | Resultado esperado |
 |---|---|---|
-| Caso 1 | `GET $BRIDGE_URL/healthy` | Código 200 o 204 |
-| Caso 2 | `POST` de `CTA-1001` en formato `text` | Respuesta con partición y offset; misma partición que en la Práctica 3 |
-| Caso 3 | Leer el topic con `print.key=true` | Los pagos HTTP muestran la cuenta como clave |
-| Caso adversarial | Enviar el pago con `Content-Type: application/json` | El HTTP Bridge rechaza la llamada con un error de tipo de contenido |
+| Caso 1 | [Entrada] | [Resultado] |
+| Caso 2 | [Entrada] | [Resultado] |
+| Caso adversarial | [Entrada que intenta inducir un error] | [Respuesta correcta esperada] |
 
 ## Resultado esperado
 
-- Los pagos publicados por HTTP llegan al topic con su clave.
-- El consumidor .NET los procesa junto con los del productor .NET.
+- [Resultado 1]
+- [Resultado 2]
 
-**Entregable:** Llamadas HTTP utilizadas, salidas de la CLI y del consumidor y una explicación breve del recorrido (`ACT06_Bitacora_[INICIALES].md`).
+**Entregable:** [Descripción exacta del entregable según el temario] (`[Nombre]_[INICIALES].ext`).
 
-<!-- Agregar captura del resultado final: ../../images/p06-resultado.png -->
+<img src="../../images/p06-resultado.svg" alt="Resultado final de la Práctica 6" width="640"/>
 
 ## Solución de problemas
 
-**El HTTP Bridge responde 415 o 422**
-- *Síntoma:* la llamada `POST` devuelve un error de formato.
-- *Causa:* el `Content-Type` no coincide con el cuerpo, o el valor no es un texto con las comillas escapadas.
-- *Solución:* copiar de nuevo el comando de la Tarea 2 sin modificar el encabezado ni el cuerpo.
+**[Problema 1]**
+- *Síntoma:* [Qué observa el participante]
+- *Causa:* [Por qué ocurre]
+- *Solución:* [Pasos concretos]
 
-**La clave aparece entre comillas en la CLI**
-- *Síntoma:* la clave se muestra como `"CTA-1001"`.
-- *Causa:* se usó el formato `application/vnd.kafka.json.v2+json`, que serializa la clave como JSON.
-- *Solución:* usar `application/vnd.kafka.text.v2+json`. Con la clave entre comillas la partición puede no coincidir con la del productor .NET.
-
-**`curl` no conecta con el HTTP Bridge**
-- *Síntoma:* `Connection refused` o tiempo de espera agotado.
-- *Causa:* la variable `$BRIDGE_URL` no está definida o el pod del HTTP Bridge no está listo.
-- *Solución:* ejecutar `source ~/.kafka-curso.env` y `kubectl get kafkabridge -n kafka`.
+**[Problema 2]**
+- *Síntoma:* [...]
+- *Causa:* [...]
+- *Solución:* [...]
 
 ## Limpieza
 
-- Detener el productor y el consumidor. Conservar la carpeta `~/entregables/` con las bitácoras ACT-01 a ACT-06 para la evaluación.
+- [Acción 1, por ejemplo: no compartir el entregable; conservarlo en `Entregables`.]
 
 ## Recursos opcionales
 
-- [Strimzi. HTTP Bridge](https://strimzi.io/docs/bridge/latest/)
-- [Apache Kafka 4.2. Kafka Connect](https://kafka.apache.org/42/kafka-connect/overview/)
+- [Documentación oficial](https://learn.microsoft.com/)
 
-<sub>Complejidad: Intermedia · Nivel de Bloom: Aplicar · Resultado de aprendizaje que verifica: R5</sub>
+<sub>Complejidad: [Fácil / Intermedia / Avanzada] · Nivel de Bloom: [Recordar / Comprender / Aplicar / Analizar / Evaluar / Crear]</sub>
 
 ---
 

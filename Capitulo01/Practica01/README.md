@@ -1,21 +1,35 @@
+<!--
+PLANTILLA COMPACTA DE README POR PRÁCTICA (versión 2.3: pasos detallados sin repeticiones dentro de la práctica: primera vez completo, después breve)
+Uso: copiar este archivo como README.md dentro de CapituloNN/PracticaNN/ y reemplazar todo lo que está entre corchetes.
+Eliminar este comentario y los comentarios de guía antes de publicar.
+
+Reglas de redacción y duración (para el autor, no se publican):
+- Pasos en verbo infinitivo, claros, concretos y en secuencia; un paso = una acción verificable.
+- Incluir nombres exactos de opciones, archivos y valores; prompts listos para copiar en bloques ```text.
+- La suma de minutos de las tareas debe ser igual a la duración del temario; considerar lectura, tiempos de respuesta de los agentes,
+  validación y errores comunes de un participante real, no de un experto.
+- Lo que se repite en todas las prácticas (prerrequisitos generales, entorno, versiones, credenciales) va en el README principal
+  y en Setup_Guide.md, no aquí.
+- No usar <details> ni llaves dobles de Liquid; usar rutas relativas sin espacios ni acentos.
+-->
+
 # Práctica 1. Recorrer el registro de eventos con la CLI
 
 **Capítulo 1. El paradigma de Kafka**
 
-⏱️ **Duración:** 45 min · 🛠️ **Herramienta:** CLI de Apache Kafka 4.2 · 📄 **Entregable:** Bitácora ACT-01
+⏱️ **Duración:** 45 min · 🛠️ **Herramienta:** [Agente o aplicación principal] · 📄 **Entregable:** [Nombre del entregable]
 
 ## Descripción
 
-Una entidad financiera ficticia registra cada pago como un evento. Dos áreas, Conciliación y Antifraude, necesitan leer los mismos pagos a su propio ritmo. En esta práctica el participante crea el topic de pagos, publica eventos con el productor de consola y los lee con dos consumidores de grupos distintos. Comprueba que leer no borra el evento, que un consumidor detenido retoma donde se quedó y que el registro se puede releer desde el inicio, y contrasta lo observado con una cola tradicional.
+[3 a 4 líneas: escenario de negocio, qué hará el participante y qué valor obtendrá.]
 
 ## Objetivos de aprendizaje
 
 Al finalizar la práctica, el participante será capaz de:
 
-- Crear un topic y publicar y leer eventos con las herramientas de consola de Kafka.
-- Comprobar que dos grupos de consumidores reciben todos los eventos de forma independiente.
-- Explicar con evidencia de la CLI la retención, la reanudación por offset y la relectura del registro.
-- Distinguir tres diferencias entre Kafka y una cola tradicional a partir de lo observado.
+- [Objetivo 1, alineado con el temario]
+- [Objetivo 2]
+- [Objetivo 3]
 
 <img src="../../images/p01-objetivo.svg" alt="Diagrama de la Práctica 1" width="720"/>
 
@@ -23,286 +37,145 @@ Al finalizar la práctica, el participante será capaz de:
 
 | Elemento | Valor |
 |---|---|
-| Dónde trabajar | Terminal de la máquina virtual del curso (bash) |
-| Variable de conexión | `$BOOTSTRAP` (definida en el [Setup Guide](../../Setup_Guide.md)) |
-| Topic de la práctica | `pagos-registro` (1 partición) |
-| Grupos de consumidores | `conciliacion-[INICIALES]` y `antifraude-[INICIALES]` |
-| Nombre del entregable | `ACT01_Bitacora_[INICIALES].md` en `~/entregables/` |
+| Dónde trabajar | [Aplicación > menú > opción] |
+| Archivos de la práctica | [Archivo1.docx](recursos/Archivo1.docx), [Archivo2.xlsx](recursos/Archivo2.xlsx) |
+| Ubicación en OneDrive | `Laboratorio_Copilot_ISA/PracticaNN/` |
+| Dato clave del escenario | [Valor que el participante necesita tener a la mano] |
+| Nombre del entregable | `[Nombre]_[INICIALES].docx` |
 
-> Sustituya `[INICIALES]` por sus iniciales en minúsculas en nombres de grupos y archivos (por ejemplo, `conciliacion-lmr`). Todos los datos de la práctica son ficticios.
+> Sustituya `[INICIALES]` por sus iniciales en nombres de archivo y prompts (por ejemplo, `Reporte_LMR.docx`). Todos los datos de la práctica son ficticios.
 
-<!-- Nota para el instructor: los temas 1.1 y 1.2 (30 min) se exponen antes de la práctica. Mostrar en pantalla la disposición de las tres terminales antes de iniciar la Tarea 2. -->
-
----
-
-## Tarea 1. Preparar la bitácora y crear el topic de pagos (8 min)
-
-**Objetivo:** Tener el topic `pagos-registro` creado con 1 partición y la bitácora iniciada con la primera predicción.
-
-**Por qué:** El topic es el registro donde se conservarán los pagos. Con una sola partición todo el orden es visible a simple vista y la atención queda en el comportamiento del registro, no en el reparto.
-
-**Paso 1.** Abrir una terminal en la máquina virtual y comprobar que la variable de conexión está definida:
-
-```bash
-echo $BOOTSTRAP
-kafka-topics.sh --version
-```
-
-- **Qué verás:** la dirección del clúster con el formato `IP:PUERTO` y la versión `4.2.x` de las herramientas.
-- **Si no ocurre así:** si `echo` no muestra nada, ejecutar `source ~/.kafka-curso.env`. Si `kafka-topics.sh` no se encuentra, revisar la sección *Variables de Entorno* del [Setup Guide](../../Setup_Guide.md).
-
-**Paso 2.** Crear la carpeta de entregables y la bitácora:
-
-```bash
-mkdir -p ~/entregables
-cat > ~/entregables/ACT01_Bitacora_[INICIALES].md <<'EOF'
-# ACT-01. Bitácora
-
-## Predicción 1
-Si dos consumidores de grupos distintos leen el mismo topic, espero que...
-
-EOF
-```
-
-**Paso 3.** Abrir la bitácora con `nano ~/entregables/ACT01_Bitacora_[INICIALES].md` y completar la **Predicción 1** con una o dos líneas. Guardar con **Ctrl+O**, **Enter** y salir con **Ctrl+X**.
-
-- **Importante:** escribir la predicción antes de ejecutar. El criterio de evaluación contrasta lo esperado con lo observado.
-
-**Paso 4.** Crear el topic con una partición:
-
-```bash
-kafka-topics.sh --bootstrap-server $BOOTSTRAP \
-  --create --topic pagos-registro \
-  --partitions 1 --replication-factor 1
-```
-
-- **Qué verás:** `Created topic pagos-registro.`
-- **Si no ocurre así:** si aparece `TopicExistsException`, el topic ya existe; continuar con el paso 5.
-
-**Paso 5.** Describir el topic y anotar en la bitácora el número de particiones y el valor de `retention.ms`:
-
-```bash
-kafka-topics.sh --bootstrap-server $BOOTSTRAP --describe --topic pagos-registro
-kafka-configs.sh --bootstrap-server $BOOTSTRAP --describe --all \
-  --entity-type topics --entity-name pagos-registro | grep retention.ms
-```
-
-- **Qué verás:** `PartitionCount: 1`, `Leader: 0` y `retention.ms=604800000` (7 días, valor predeterminado).
-
-**Al terminar esta tarea debes tener:**
-
-- ✔ El topic `pagos-registro` con 1 partición.
-- ✔ La Predicción 1 escrita en la bitácora.
+<!-- Opcional: una nota breve para el instructor (exposición previa, demostración, trabajo en paralelo). -->
 
 ---
 
-## Tarea 2. Publicar pagos y leerlos con dos grupos distintos (12 min)
+<!--
+Estructura obligatoria de cada tarea:
+- Objetivo: el RESULTADO concreto y verificable que tendrá el participante (qué tabla, lista, archivo o confirmación), no la acción.
+  Mal: "Relacionar hallazgos con prioridades". Bien: "Obtener una tabla de las 4 prioridades con nivel de contribución, evidencia y restricción".
+- Por qué: una o dos líneas que conecten la tarea con el problema del escenario y con los datos concretos que el participante debe considerar.
+- Pasos: una acción por paso. Indicar dónde hacer clic (ruta completa: aplicación > menú > opción), qué escribir (prompt completo),
+  y debajo de cada paso las viñetas que apliquen: "Qué verás" (lo que aparece en pantalla), "Si no ocurre así" o "Alternativa"
+  (qué hacer si algo falla), "Cómo insertar los archivos" (cuando el prompt referencia archivos) e "Importante" (advertencias).
+  Para guardar, indicar la ruta completa: Archivo > Guardar como > OneDrive > Laboratorio_Copilot_ISA > Entregables y el nombre exacto.
+- Primera vez completo, después breve: dentro de una misma práctica, los procedimientos que se repiten (abrir Copilot o un agente,
+  insertar archivos con /, crear el documento de Word y pegar, guardar en Entregables) se explican completos solo la primera vez;
+  las siguientes veces se escriben en una línea, por ejemplo "Guardar en `Entregables` con el nombre `X`, igual que antes".
+  Cada práctica debe poder seguirse sin abrir otra práctica ni otro documento.
+- No incluir viñetas obvias (por ejemplo, "Enviar: presionar Enter"); el paso ya dice "pegar el prompt y enviarlo".
+  Evitar pasos vagos como "Revisar el resultado" o "Copiar a Word": decir qué revisar y dónde pegar y guardar.
+- Al terminar esta tarea debes tener: 1 a 3 elementos comprobables que permitan al participante saber que puede continuar.
+-->
 
-**Objetivo:** Obtener la salida de dos consumidores, uno por grupo, que muestran los mismos 5 pagos con los mismos offsets.
+## Tarea 1. [Nombre de la tarea] ([X] min)
 
-**Por qué:** En una cola, un mensaje entregado a un receptor ya no está disponible para otro. En Kafka cada grupo lleva su propia posición en el registro, por lo que Conciliación y Antifraude reciben todos los pagos.
+**Objetivo:** [Resultado concreto: "Obtener una tabla de … con …"]
 
-**Paso 1.** Organizar tres terminales en la máquina virtual: **T1** para el productor, **T2** para Conciliación y **T3** para Antifraude. En cada terminal nueva, comprobar `echo $BOOTSTRAP`.
+**Por qué:** [Relación con el escenario y los datos clave que deben considerarse.]
 
-**Paso 2.** En **T2**, iniciar el consumidor de Conciliación:
+**Paso 1.** Abrir **Microsoft Edge**, escribir [m365.cloud.microsoft](https://m365.cloud.microsoft/) en la barra de direcciones y presionar **Enter**. Si se solicita, iniciar sesión con su cuenta corporativa.
 
-```bash
-kafka-console-consumer.sh --bootstrap-server $BOOTSTRAP \
-  --topic pagos-registro --group conciliacion-[INICIALES] \
-  --property print.offset=true --property print.timestamp=true
-```
+- **Qué verás:** [Lo que aparece en pantalla al completar la acción.]
+- **Alternativa:** [Si aparece algo distinto, qué hacer.]
 
-- **Qué verás:** el cursor queda en espera, sin mensajes.
+**Paso 2.** En el panel izquierdo, seleccionar **[menú]**. Escribir `[nombre exacto]` en el cuadro de búsqueda y hacer clic en el resultado.
 
-**Paso 3.** En **T3**, iniciar el consumidor de Antifraude con el mismo comando, cambiando únicamente el grupo a `antifraude-[INICIALES]`.
+- **Qué verás:** [Confirmación visible, por ejemplo el nombre del agente encima del cuadro de mensaje.]
+- **Si no ocurre así:** [Ruta alternativa o a quién avisar.]
 
-**Paso 4.** En **T1**, iniciar el productor de consola:
-
-```bash
-kafka-console-producer.sh --bootstrap-server $BOOTSTRAP --topic pagos-registro
-```
-
-**Paso 5.** En **T1**, escribir los siguientes pagos, uno por línea, presionando **Enter** después de cada uno:
+**Paso 3.** Pegar el siguiente prompt y enviarlo:
 
 ```text
-{"idPago":"P-0001","cuenta":"CTA-1001","monto":1500.00,"moneda":"MXN"}
-{"idPago":"P-0002","cuenta":"CTA-2002","monto":320.50,"moneda":"MXN"}
-{"idPago":"P-0003","cuenta":"CTA-1001","monto":89.90,"moneda":"MXN"}
-{"idPago":"P-0004","cuenta":"CTA-3003","monto":12000.00,"moneda":"MXN"}
-{"idPago":"P-0005","cuenta":"CTA-2002","monto":45.00,"moneda":"MXN"}
+[Prompt completo, referenciando archivos con /Nombre_Archivo]
 ```
 
-- **Qué verás:** en **T2** y **T3** aparecen los cinco pagos, con `Offset:0` a `Offset:4` en ambas terminales.
+- **Cómo insertar los archivos:** cada texto que empieza con `/` es un archivo: borrarlo, escribir `/` y las primeras letras del nombre, y elegir el archivo en la lista. Si no aparece, usar **+** > **Cargar desde OneDrive** > `Laboratorio_Copilot_ISA/PracticaNN`.
+- **Qué verás:** [Estructura esperada de la respuesta y tiempo aproximado.]
 
-**Paso 6.** Copiar la salida de **T2** y de **T3** a la bitácora bajo el título `## Evidencia 1. Dos grupos, mismos eventos` y anotar si coincide con la Predicción 1.
+**Paso 4.** Comprobar que la respuesta incluya [datos concretos esperados, con cifras o nombres].
+
+- **Si no ocurre así:** escribir *"[prompt de corrección]"*.
 
 **Al terminar esta tarea debes tener:**
 
-- ✔ Los cinco pagos visibles en ambos consumidores con offsets 0 a 4.
-- ✔ La Evidencia 1 registrada en la bitácora.
+- ✔ [Elemento comprobable 1]
+- ✔ [Elemento comprobable 2]
 
 ---
 
-## Tarea 3. Detener un consumidor y comprobar que retoma donde quedó (12 min)
+## Tarea 2. [Nombre de la tarea] ([X] min)
 
-**Objetivo:** Obtener la descripción del grupo `antifraude-[INICIALES]` con lag 3 mientras está detenido y la salida que muestra que, al volver, lee solo los pagos P-0006 a P-0008.
+**Objetivo:** [Resultado concreto.]
 
-**Por qué:** El grupo confirma (commit) su offset en el clúster. Un consumidor que se detiene no pierde eventos ni vuelve a leer los ya procesados.
+**Por qué:** [Relación con el escenario.]
 
-**Paso 1.** Agregar a la bitácora la **Predicción 2**: qué leerá Antifraude al volver si mientras está detenido se publican tres pagos.
+**Paso 1.** [Acción.]
 
-**Paso 2.** En **T3**, detener el consumidor de Antifraude con **Ctrl+C**.
-
-- **Qué verás:** `Processed a total of 5 messages`.
-
-**Paso 3.** En **T1**, publicar tres pagos más:
-
-```text
-{"idPago":"P-0006","cuenta":"CTA-3003","monto":700.00,"moneda":"MXN"}
-{"idPago":"P-0007","cuenta":"CTA-1001","monto":15.75,"moneda":"MXN"}
-{"idPago":"P-0008","cuenta":"CTA-4004","monto":2300.00,"moneda":"MXN"}
-```
-
-- **Qué verás:** solo **T2** (Conciliación) muestra los offsets 5, 6 y 7.
-
-**Paso 4.** En **T3**, describir el grupo detenido:
-
-```bash
-kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP \
-  --describe --group antifraude-[INICIALES]
-```
-
-- **Qué verás:** el aviso `Consumer group 'antifraude-...' has no active members.` y una fila con `CURRENT-OFFSET 5`, `LOG-END-OFFSET 8` y `LAG 3`.
-
-**Paso 5.** En **T3**, volver a iniciar el consumidor de Antifraude con el mismo comando de la Tarea 2, paso 3.
-
-- **Qué verás:** aparecen únicamente los pagos P-0006, P-0007 y P-0008 (offsets 5 a 7).
-
-**Paso 6.** Copiar a la bitácora la salida del `--describe` y la del consumidor reanudado bajo `## Evidencia 2. Reanudación` y comparar con la Predicción 2.
+**Paso 2.** [Acción y verificación.]
 
 **Al terminar esta tarea debes tener:**
 
-- ✔ La descripción del grupo con `LAG 3` mientras estaba detenido.
-- ✔ La salida que muestra la reanudación desde el offset 5.
+- ✔ [Elemento comprobable]
 
 ---
 
-## Tarea 4. Releer el registro desde el inicio (6 min)
+## Tarea N. [Nombre de la tarea] ([X] min)
 
-**Objetivo:** Obtener una salida con los ocho pagos leídos de nuevo desde el offset 0, sin alterar la posición de los grupos de la práctica.
+**Objetivo:** Tener guardado `[Nombre]_[INICIALES].ext` con [secciones o contenido].
 
-**Por qué:** Los eventos se conservan según la política de retención, no según si ya se leyeron. Esto permite reconstruir un estado, auditar o incorporar un consumidor nuevo que necesite el historial.
+**Por qué:** [Para qué se usará el entregable.]
 
-**Paso 1.** Detener los consumidores de **T2** y **T3** con **Ctrl+C**. Dejar **T1** abierta.
+**Paso 1.** Abrir Word (escritorio o web) y crear un **Documento en blanco**. En Copilot, seleccionar **Copiar** debajo de [respuestas] y pegar en Word con **Ctrl+V**.
 
-**Paso 2.** En **T2**, leer el topic completo desde el inicio sin indicar grupo:
+**Paso 2.** Agregar los títulos [lista de secciones] y mover cada contenido bajo el título que corresponda.
 
-```bash
-kafka-console-consumer.sh --bootstrap-server $BOOTSTRAP \
-  --topic pagos-registro --from-beginning \
-  --property print.offset=true --max-messages 8
-```
-
-- **Qué verás:** los ocho pagos, de `Offset:0` a `Offset:7`, y `Processed a total of 8 messages`.
-
-**Paso 3.** Comprobar que la relectura no cambió la posición de Conciliación:
-
-```bash
-kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP \
-  --describe --group conciliacion-[INICIALES]
-```
-
-- **Qué verás:** `CURRENT-OFFSET 8` y `LAG 0`. La relectura usó un grupo temporal propio.
-
-**Paso 4.** Copiar ambas salidas a la bitácora bajo `## Evidencia 3. Relectura`.
+**Paso 3.** Seleccionar **Archivo > Guardar como**, elegir **OneDrive > Laboratorio_Copilot_ISA > Entregables** y guardar con el nombre `[Nombre]_[INICIALES].ext`.
 
 **Al terminar esta tarea debes tener:**
 
-- ✔ Los ocho pagos releídos desde el offset 0.
-- ✔ Evidencia de que el grupo `conciliacion-[INICIALES]` mantiene su offset.
-
----
-
-## Tarea 5. Contrastar Kafka con una cola tradicional (7 min)
-
-**Objetivo:** Tener la bitácora completa con tres diferencias entre Kafka y una cola tradicional, cada una apoyada en una evidencia.
-
-**Por qué:** El resto del curso parte de este cambio de mentalidad: leer un evento no es consumirlo en el sentido de una cola.
-
-**Paso 1.** Agregar a la bitácora la sección `## Diferencias con una cola tradicional` con la siguiente estructura y completarla:
-
-```text
-| # | En una cola tradicional... | En Kafka observé... | Evidencia |
-|---|---|---|---|
-| 1 | Un mensaje entregado a un receptor ya no está disponible para otro | | Evidencia 1 |
-| 2 | | | Evidencia 2 |
-| 3 | | | Evidencia 3 |
-```
-
-**Paso 2.** Agregar una sección `## Discrepancias` con cualquier diferencia entre las predicciones y lo observado, y su explicación. Si no hubo, escribir `Sin discrepancias`.
-
-**Paso 3.** Detener el productor de **T1** con **Ctrl+C** y comprobar que el archivo está completo:
-
-```bash
-grep -c "Evidencia" ~/entregables/ACT01_Bitacora_[INICIALES].md
-```
-
-- **Qué verás:** un número mayor o igual a 6.
-
-**Al terminar esta tarea debes tener:**
-
-- ✔ La tabla de tres diferencias con su evidencia.
-- ✔ La bitácora guardada en `~/entregables/`.
+- ✔ [Entregable con sus secciones]
+- ✔ El archivo guardado en `Entregables`.
 
 ---
 
 ## Validación y pruebas
 
-| Caso | Acción | Resultado esperado |
+| Caso | Acción o prompt | Resultado esperado |
 |---|---|---|
-| Caso 1 | Publicar 5 pagos con dos consumidores activos de grupos distintos | Ambos muestran los 5 pagos con offsets 0 a 4 |
-| Caso 2 | Detener Antifraude, publicar 3 pagos y describir su grupo | `LAG 3`; al reiniciar lee solo los offsets 5 a 7 |
-| Caso 3 | Leer con `--from-beginning` sin grupo | Se muestran los 8 pagos; el lag de Conciliación sigue en 0 |
-| Caso adversarial | Reiniciar Antifraude agregando `--from-beginning` con el mismo grupo | No relee: el grupo ya tiene offset confirmado y `--from-beginning` solo aplica a grupos sin offset |
+| Caso 1 | [Entrada] | [Resultado] |
+| Caso 2 | [Entrada] | [Resultado] |
+| Caso adversarial | [Entrada que intenta inducir un error] | [Respuesta correcta esperada] |
 
 ## Resultado esperado
 
-- Dos grupos de consumidores leyeron los mismos eventos de forma independiente.
-- Un consumidor detenido retomó exactamente donde se quedó.
-- El registro completo se releyó desde el inicio sin afectar a los grupos.
+- [Resultado 1]
+- [Resultado 2]
 
-**Entregable:** Bitácora con las predicciones previas, las salidas de la CLI y una explicación de tres diferencias entre Kafka y una cola tradicional basadas en lo observado (`ACT01_Bitacora_[INICIALES].md`).
+**Entregable:** [Descripción exacta del entregable según el temario] (`[Nombre]_[INICIALES].ext`).
 
-<!-- Agregar captura del resultado final: ../../images/p01-resultado.png -->
+<img src="../../images/p01-resultado.svg" alt="Resultado final de la Práctica 1" width="640"/>
 
 ## Solución de problemas
 
-**El consumidor no muestra mensajes**
-- *Síntoma:* el productor acepta líneas, pero ningún consumidor las muestra.
-- *Causa:* el consumidor se inició con un grupo que ya tenía offsets confirmados al final del topic, o se conectó a otro topic.
-- *Solución:* comprobar el nombre del topic en ambos comandos y describir el grupo con `kafka-consumer-groups.sh --describe`.
+**[Problema 1]**
+- *Síntoma:* [Qué observa el participante]
+- *Causa:* [Por qué ocurre]
+- *Solución:* [Pasos concretos]
 
-**Error de conexión al broker**
-- *Síntoma:* `Connection to node -1 could not be established` o `Timed out waiting for a node assignment`.
-- *Causa:* la variable `$BOOTSTRAP` no está definida en esa terminal o el clúster no está listo.
-- *Solución:* ejecutar `source ~/.kafka-curso.env` y `kubectl get kafka -n kafka`; esperar a que `READY` sea `True`.
-
-**Aviso de propiedad obsoleta**
-- *Síntoma:* el consumidor muestra un aviso sobre `--property`.
-- *Causa:* Kafka 4.x introduce opciones con nombres nuevos para el formateador.
-- *Solución:* el aviso no impide la práctica; continuar.
+**[Problema 2]**
+- *Síntoma:* [...]
+- *Causa:* [...]
+- *Solución:* [...]
 
 ## Limpieza
 
-- Conservar el topic `pagos-registro` y la bitácora en `~/entregables/`. No eliminar los grupos de consumidores.
+- [Acción 1, por ejemplo: no compartir el entregable; conservarlo en `Entregables`.]
 
 ## Recursos opcionales
 
-- [Apache Kafka 4.2. Design](https://kafka.apache.org/42/design/design/)
-- [Apache Kafka 4.2. Quick Start](https://kafka.apache.org/42/getting-started/quickstart/)
-- [Strimzi 1.2.0. Deploying](https://strimzi.io/docs/operators/1.2.0/deploying)
+- [Documentación oficial](https://learn.microsoft.com/)
 
-<sub>Complejidad: Fácil · Nivel de Bloom: Comprender · Resultado de aprendizaje que verifica: R1</sub>
+<sub>Complejidad: [Fácil / Intermedia / Avanzada] · Nivel de Bloom: [Recordar / Comprender / Aplicar / Analizar / Evaluar / Crear]</sub>
 
 ---
 
