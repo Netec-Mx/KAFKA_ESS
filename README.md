@@ -30,24 +30,24 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
 
 ## Capítulo 3. Clientes .NET con C#
 
-### [Práctica 3. Conectar un productor C#/.NET con un consumidor C#/.NET](Capitulo03/README.md)
+### [Práctica 3. Conectar un productor C#/.NET con un consumidor C#/.NET](Capitulo03/README_Practica03.md)
 
   - **Descripción**: Configurar un productor y un consumidor .NET con Confluent.Kafka, publicar pagos JSON con la cuenta como clave y analizar acks, idempotencia y el particionador murmur2_random.
   - ⏱️ **Duración estimada**: 50 min.
 
-### [Práctica 4. Escalar el consumo y estimar el número de particiones](Capitulo03/README.md)
+### [Práctica 4. Escalar el consumo y estimar el número de particiones](Capitulo03/README_Practica04.md)
 
   - **Descripción**: Escalar el consumo con varias instancias del consumidor .NET, observar las reasignaciones, comparar auto.offset.reset y calcular el mínimo inicial de particiones.
   - ⏱️ **Duración estimada**: 44 min.
 
 ## Capítulo 4. Errores, reproceso y sistemas sin cliente Kafka
 
-### [Práctica 5. Provocar fallas en el consumidor sin perder pagos](Capitulo04/README.md)
+### [Práctica 5. Provocar fallas en el consumidor sin perder pagos](Capitulo04/README_Practica05.md)
 
   - **Descripción**: Interrumpir el consumidor a mitad de un lote, comparar la confirmación manual y la automática, hacer idempotente el procesamiento y enviar los eventos inválidos a un topic de errores.
   - ⏱️ **Duración estimada**: 63 min.
 
-### [Práctica 6. Publicar desde un sistema legado por HTTP](Capitulo04/README.md)
+### [Práctica 6. Publicar desde un sistema legado por HTTP](Capitulo04/README_Practica06.md)
 
   - **Descripción**: Publicar pagos de un sistema sin cliente Kafka mediante el HTTP Bridge de Strimzi y verificar que el consumidor .NET los procesa.
   - ⏱️ **Duración estimada**: 25 min.

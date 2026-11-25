@@ -1,4 +1,4 @@
-# Nombre del laboratorio 
+# Práctica 2. Comprobar el efecto de claves, particiones y grupos de consumidores
 
 ## Objetivo de la práctica:
 Al finalizar la práctica, serás capaz de:

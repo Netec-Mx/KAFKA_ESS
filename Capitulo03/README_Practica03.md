@@ -1,4 +1,4 @@
-# Nombre del laboratorio 
+# Práctica 3. Conectar un productor C#/.NET con un consumidor C#/.NET
 
 ## Objetivo de la práctica:
 Al finalizar la práctica, serás capaz de:

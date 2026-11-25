@@ -1,4 +1,4 @@
-# Nombre del laboratorio 
+# Práctica 5. Provocar fallas en el consumidor sin perder pagos
 
 ## Objetivo de la práctica:
 Al finalizar la práctica, serás capaz de:

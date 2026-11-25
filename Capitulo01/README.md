@@ -1,4 +1,4 @@
-# Nombre del laboratorio 
+# Práctica 1. Recorrer el registro de eventos con la CLI
 
 ## Objetivo de la práctica:
 Al finalizar la práctica, serás capaz de:
