@@ -16,38 +16,38 @@ Cada uno de estos laboratorios está diseñado para ofrecerte una experiencia pr
 
 ## Capítulo 1. El paradigma de Kafka
 
-### [Práctica 1. Recorrer el registro de eventos con la CLI](Capitulo01/Practica01/README.md)
+### [Práctica 1. Recorrer el registro de eventos con la CLI](Capitulo01/README.md)
 
   - **Descripción**: Crear un topic de pagos, publicar eventos y leerlos con dos grupos de consumidores para comprobar la retención, la reanudación y la relectura, y contrastar Kafka con una cola tradicional.
   - ⏱️ **Duración estimada**: 45 min.
 
 ## Capítulo 2. Topics, particiones, claves y offsets
 
-### [Práctica 2. Comprobar el efecto de claves, particiones y grupos de consumidores](Capitulo02/Practica02/README.md)
+### [Práctica 2. Comprobar el efecto de claves, particiones y grupos de consumidores](Capitulo02/README.md)
 
   - **Descripción**: Predecir y comprobar la partición y el orden por cuenta, observar el particionador sticky, repartir particiones entre consumidores, medir lag, reposicionar un grupo y calcular el throughput pico.
   - ⏱️ **Duración estimada**: 67 min.
 
 ## Capítulo 3. Clientes .NET con C#
 
-### [Práctica 3. Conectar un productor C#/.NET con un consumidor C#/.NET](Capitulo03/Practica03/README.md)
+### [Práctica 3. Conectar un productor C#/.NET con un consumidor C#/.NET](Capitulo03/README.md)
 
   - **Descripción**: Configurar un productor y un consumidor .NET con Confluent.Kafka, publicar pagos JSON con la cuenta como clave y analizar acks, idempotencia y el particionador murmur2_random.
   - ⏱️ **Duración estimada**: 50 min.
 
-### [Práctica 4. Escalar el consumo y estimar el número de particiones](Capitulo03/Practica04/README.md)
+### [Práctica 4. Escalar el consumo y estimar el número de particiones](Capitulo03/README.md)
 
   - **Descripción**: Escalar el consumo con varias instancias del consumidor .NET, observar las reasignaciones, comparar auto.offset.reset y calcular el mínimo inicial de particiones.
   - ⏱️ **Duración estimada**: 44 min.
 
 ## Capítulo 4. Errores, reproceso y sistemas sin cliente Kafka
 
-### [Práctica 5. Provocar fallas en el consumidor sin perder pagos](Capitulo04/Practica05/README.md)
+### [Práctica 5. Provocar fallas en el consumidor sin perder pagos](Capitulo04/README.md)
 
   - **Descripción**: Interrumpir el consumidor a mitad de un lote, comparar la confirmación manual y la automática, hacer idempotente el procesamiento y enviar los eventos inválidos a un topic de errores.
   - ⏱️ **Duración estimada**: 63 min.
 
-### [Práctica 6. Publicar desde un sistema legado por HTTP](Capitulo04/Practica06/README.md)
+### [Práctica 6. Publicar desde un sistema legado por HTTP](Capitulo04/README.md)
 
   - **Descripción**: Publicar pagos de un sistema sin cliente Kafka mediante el HTTP Bridge de Strimzi y verificar que el consumidor .NET los procesa.
   - ⏱️ **Duración estimada**: 25 min.
